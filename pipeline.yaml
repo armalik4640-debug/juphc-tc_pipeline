@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: tax-calculator-pipeline
+spec:
+  tasks:
+    - name: fetch-repo
+      taskRef: { name: git-clone }
+    - name: build-image
+      taskRef: { name: build-docker-image }
+      runAfter: [fetch-repo]
+    - name: deploy
+      taskRef: { name: deploy-to-code-engine }
+      runAfter: [build-image]
